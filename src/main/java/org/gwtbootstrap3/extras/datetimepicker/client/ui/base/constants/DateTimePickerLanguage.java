@@ -20,63 +20,58 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
  * #L%
  */
 
-import com.google.gwt.resources.client.TextResource;
-import org.gwtbootstrap3.extras.datetimepicker.client.DateTimePickerClientBundle;
-
 /**
  * @author Joshua Godi
  */
 public enum DateTimePickerLanguage {
-    AR("ar", DateTimePickerClientBundle.INSTANCE.ar()),
-    BG("bg", DateTimePickerClientBundle.INSTANCE.bg()),
-    CA("ca", DateTimePickerClientBundle.INSTANCE.ca()),
-    CS("cs", DateTimePickerClientBundle.INSTANCE.cs()),
-    DA("da", DateTimePickerClientBundle.INSTANCE.da()),
-    DE("de", DateTimePickerClientBundle.INSTANCE.de()),
-    EE("ee", DateTimePickerClientBundle.INSTANCE.ee()),
-    EL("el", DateTimePickerClientBundle.INSTANCE.el()),
-    ES("es", DateTimePickerClientBundle.INSTANCE.es()),
-    FI("fi", DateTimePickerClientBundle.INSTANCE.fi()),
-    FR("fr", DateTimePickerClientBundle.INSTANCE.fr()),
-    HE("he", DateTimePickerClientBundle.INSTANCE.he()),
-    HR("hr", DateTimePickerClientBundle.INSTANCE.hr()),
-    HU("hu", DateTimePickerClientBundle.INSTANCE.hu()),
-    ID("id", DateTimePickerClientBundle.INSTANCE.id()),
-    IS("is", DateTimePickerClientBundle.INSTANCE.is()),
-    IT("it", DateTimePickerClientBundle.INSTANCE.it()),
-    JA("ja", DateTimePickerClientBundle.INSTANCE.ja()),
-    KO("ko", DateTimePickerClientBundle.INSTANCE.ko()),
-    KR("kr", DateTimePickerClientBundle.INSTANCE.kr()),
-    LT("lt", DateTimePickerClientBundle.INSTANCE.lt()),
-    LV("lv", DateTimePickerClientBundle.INSTANCE.lv()),
-    MS("ms", DateTimePickerClientBundle.INSTANCE.ms()),
-    NB("nb", DateTimePickerClientBundle.INSTANCE.nb()),
-    NL("nl", DateTimePickerClientBundle.INSTANCE.nl()),
-    NO("no", DateTimePickerClientBundle.INSTANCE.no()),
-    PL("pl", DateTimePickerClientBundle.INSTANCE.pl()),
-    PT_BR("pt-BR", DateTimePickerClientBundle.INSTANCE.pt_BR()),
-    PT("pt", DateTimePickerClientBundle.INSTANCE.pt()),
-    RO("ro", DateTimePickerClientBundle.INSTANCE.ro()),
-    RS_LATIN("rs-latin", DateTimePickerClientBundle.INSTANCE.rs_latin()),
-    RS("rs", DateTimePickerClientBundle.INSTANCE.rs()),
-    RU("ru", DateTimePickerClientBundle.INSTANCE.ru()),
-    SK("sk", DateTimePickerClientBundle.INSTANCE.sk()),
-    SL("sl", DateTimePickerClientBundle.INSTANCE.sl()),
-    SV("sv", DateTimePickerClientBundle.INSTANCE.sv()),
-    SW("sw", DateTimePickerClientBundle.INSTANCE.sw()),
-    TH("th", DateTimePickerClientBundle.INSTANCE.th()),
-    TR("tr", DateTimePickerClientBundle.INSTANCE.tr()),
-    UA("ua", DateTimePickerClientBundle.INSTANCE.ua()),
-    UK("uk", DateTimePickerClientBundle.INSTANCE.uk()),
-    ZH_CN("zh-CN", DateTimePickerClientBundle.INSTANCE.zh_CN()),
-    ZH_TW("zh-TW", DateTimePickerClientBundle.INSTANCE.zh_TW()),
-    EN("en", null); // Base language, don't need another file
+    AR("ar"),
+    BG("bg"),
+    CA("ca"),
+    CS("cs"),
+    DA("da"),
+    DE("de"),
+    EE("ee"),
+    EL("el"),
+    ES("es"),
+    FI("fi"),
+    FR("fr"),
+    HE("he"),
+    HR("hr"),
+    HU("hu"),
+    ID("id"),
+    IS("is"),
+    IT("it"),
+    JA("ja"),
+    KO("ko"),
+    KR("kr"),
+    LT("lt"),
+    LV("lv"),
+    MS("ms"),
+    NB("nb"),
+    NL("nl"),
+    NO("no"),
+    PL("pl"),
+    PT_BR("pt-BR"),
+    PT("pt"),
+    RO("ro"),
+    RS_LATIN("rs-latin"),
+    RS("rs"),
+    RU("ru"),
+    SK("sk"),
+    SL("sl"),
+    SV("sv"),
+    SW("sw"),
+    TH("th"),
+    TR("tr"),
+    UA("ua"),
+    UK("uk"),
+    ZH_CN("zh-CN"),
+    ZH_TW("zh-TW"),
+    EN("en");
 
     private final String code;
-    private final TextResource js;
 
-    private DateTimePickerLanguage(final String code, final TextResource js) {
-        this.js = js;
+    private DateTimePickerLanguage(final String code) {
         this.code = code;
     }
 
@@ -84,7 +79,5 @@ public enum DateTimePickerLanguage {
         return code;
     }
 
-    public TextResource getJs() {
-        return js;
-    }
+
 }

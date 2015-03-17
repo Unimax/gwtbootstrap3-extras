@@ -1,4 +1,4 @@
-package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
+package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events;
 
 /*
  * #%L
@@ -20,13 +20,12 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
  * #L%
  */
 
+import com.google.gwt.event.shared.EventHandler;
+
 /**
- * Boolean. Default: false
- * <p/>
- * This option will enable meridian views for day and hour views.
- *
  * @author Joshua Godi
  */
-public interface HasShowMeridian {
-    void setShowMeridian(boolean showMeridian);
+public interface ErrorHandler extends EventHandler {
+    void onOutOfRange(final ErrorEvent evt);
 }
+

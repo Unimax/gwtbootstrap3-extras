@@ -20,7 +20,6 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base;
  * #L%
  */
 
-import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.editor.client.IsEditor;
@@ -47,37 +46,11 @@ import org.gwtbootstrap3.client.ui.base.HasResponsiveness;
 import org.gwtbootstrap3.client.ui.base.ValueBoxBase;
 import org.gwtbootstrap3.client.ui.base.helper.StyleHelper;
 import org.gwtbootstrap3.client.ui.constants.DeviceSize;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.DateTimePickerDayOfWeek;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.DateTimePickerLanguage;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.DateTimePickerPosition;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.DateTimePickerView;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasAutoClose;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasDateTimePickerHandlers;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasDaysOfWeekDisabled;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasEndDate;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasForceParse;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasFormat;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasHighlightToday;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasKeyboardNavigation;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasLanguage;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasMaxView;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasMinView;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasMinuteStep;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasPosition;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasShowMeridian;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasShowTodayButton;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasStartDate;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasStartView;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasViewSelect;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.HasWeekStart;
+import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.*;
 import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeDateEvent;
 import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeDateHandler;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeMonthEvent;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeMonthHandler;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeYearEvent;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeYearHandler;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.OutOfRangeEvent;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.OutOfRangeHandler;
+import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ErrorEvent;
+import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ErrorHandler;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -89,7 +62,7 @@ import java.util.Map;
 public class DateTimePickerBase extends Widget implements HasEnabled, HasId, HasResponsiveness,
         HasVisibility, HasPlaceholder, HasAutoClose, HasDaysOfWeekDisabled, HasEndDate, HasForceParse,
         HasFormat, HasHighlightToday, HasKeyboardNavigation, HasMaxView, HasMinuteStep, HasMinView,
-        HasShowMeridian, HasShowTodayButton, HasStartDate, HasStartView, HasViewSelect, HasWeekStart,
+        HasShowTodayButton, HasStartDate, HasStartView, HasViewSelect, HasWeekStart,
         HasDateTimePickerHandlers, HasLanguage, HasName, HasValue<Date>, HasPosition, IsEditor<LeafValueEditor<Date>> {
 
     // Check http://www.gwtproject.org/javadoc/latest/com/google/gwt/i18n/client/DateTimeFormat.html
@@ -213,13 +186,12 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     @Override
     public void setLanguage(final DateTimePickerLanguage language) {
         this.language = language;
-
-        // Inject the JS for the language
-        if (language.getJs() != null) {
-            ScriptInjector.fromString(language.getJs().getText())
-                    .setWindow(ScriptInjector.TOP_WINDOW).inject();
-        }
+		setLanguage(language.getCode());
     }
+
+	private final native void setLanguage(String code) /*-{
+        $wnd.moment.locale(code);
+	}-*/;
 
     @Override
     public DateTimePickerLanguage getLanguage() {
@@ -298,34 +270,15 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
         return addHandler(changeDateHandler, ChangeDateEvent.getType());
     }
 
+
     @Override
-    public void onChangeYear(final Event e) {
-        fireEvent(new ChangeYearEvent(e));
+    public void onError(final Event e) {
+        fireEvent(new ErrorEvent(e));
     }
 
     @Override
-    public HandlerRegistration addChangeYearHandler(final ChangeYearHandler changeYearHandler) {
-        return addHandler(changeYearHandler, ChangeYearEvent.getType());
-    }
-
-    @Override
-    public void onChangeMonth(final Event e) {
-        fireEvent(new ChangeMonthEvent(e));
-    }
-
-    @Override
-    public HandlerRegistration addChangeMonthHandler(final ChangeMonthHandler changeMonthHandler) {
-        return addHandler(changeMonthHandler, ChangeMonthEvent.getType());
-    }
-
-    @Override
-    public void onOutOfRange(final Event e) {
-        fireEvent(new OutOfRangeEvent(e));
-    }
-
-    @Override
-    public HandlerRegistration addOutOfRangeHandler(final OutOfRangeHandler outOfRangeHandler) {
-        return addHandler(outOfRangeHandler, OutOfRangeEvent.getType());
+    public HandlerRegistration addErrorHandler(final ErrorHandler errorHandler) {
+        return addHandler(errorHandler, ErrorEvent.getType());
     }
 
     @Override
@@ -383,11 +336,6 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     @Override
     public void setMinuteStep(final int minuteStep) {
         this.minuteStep = minuteStep;
-    }
-
-    @Override
-    public void setShowMeridian(final boolean showMeridian) {
-        this.showMeridian = showMeridian;
     }
 
     @Override
@@ -571,15 +519,15 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     }-*/;
 
     private native void setStartDate(Element e, String startDate) /*-{
-        $wnd.jQuery(e).datetimepicker('setStartDate', startDate);
+        $wnd.jQuery(e).datetimepicker('minDate', startDate);
     }-*/;
 
     private native void setEndDate(Element e, String endDate) /*-{
-        $wnd.jQuery(e).datetimepicker('setEndDate', endDate);
+        $wnd.jQuery(e).datetimepicker('maxDate', endDate);
     }-*/;
 
     private native void setDaysOfWeekDisabled(Element e, String daysOfWeekDisabled) /*-{
-        $wnd.jQuery(e).datetimepicker('setDaysOfWeekDisabled', daysOfWeekDisabled);
+        $wnd.jQuery(e).datetimepicker('daysOfWeekDisabled', daysOfWeekDisabled);
     }-*/;
 
     protected native void configure(Element e, Element p, String format, int weekStart, String daysOfWeekDisabled,
@@ -602,27 +550,20 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
             keyboardNavigation: keyboardNavigation,
             forceParse: forceParse,
             minuteStep: minuteStep,
-            showMeridian: showMeridian,
             pickerPosition: position,
             container: p
         })
-            .on('show', function (e) {
+            .on('dp.show', function (e) {
                 that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onShow(Lcom/google/gwt/user/client/Event;)(e);
             })
-            .on("hide", function (e) {
+            .on("dp.hide", function (e) {
                 that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onHide(Lcom/google/gwt/user/client/Event;)(e);
             })
-            .on("changeDate", function (e) {
+            .on("dp.change", function (e) {
                 that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onChangeDate(Lcom/google/gwt/user/client/Event;)(e);
             })
-            .on("changeYear", function (e) {
-                that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onChangeYear(Lcom/google/gwt/user/client/Event;)(e);
-            })
-            .on("changeMonth", function (e) {
-                that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onChangeMonth(Lcom/google/gwt/user/client/Event;)(e);
-            })
-            .on("outOfRange", function (e) {
-                that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onOutOfRange(Lcom/google/gwt/user/client/Event;)(e);
+            .on("dp.error", function (e) {
+                that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onError(Lcom/google/gwt/user/client/Event;)(e);
             });
     }-*/;
 
