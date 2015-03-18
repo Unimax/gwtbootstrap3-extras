@@ -26,8 +26,8 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
  * The highest view that the datetimepicker should show.
  *
  * @author Joshua Godi
- * @see org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants.DateTimePickerView
+ * @see DateTimePickerStartView
  */
 public interface HasMaxView {
-    void setMaxView(DateTimePickerView dateTimePickerView);
+    void setMaxView(DateTimePickerStartView dateTimePickerStartView);
 }

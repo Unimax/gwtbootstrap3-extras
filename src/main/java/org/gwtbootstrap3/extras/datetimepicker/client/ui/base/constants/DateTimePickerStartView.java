@@ -21,28 +21,20 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
  */
 
 /**
- * 0 or 'hour' for the hour view
- * 1 or 'day' for the day view
- * 2 or 'month' for month view (the default)
- * 3 or 'year' for the 12-month overview
- * 4 or 'decade' for the 10-year overview. Useful for date-of-birth datetimepickers.
- *
- * @author Joshua Godi
+ * @author Matt Davis
  */
-public enum DateTimePickerView {
-    HOUR(0),
-    DAY(1),
-    MONTH(2),
-    YEAR(3),
-    DECADE(4);
+public enum DateTimePickerStartView {
+    DAY("days"),
+    MONTH("months"),
+    YEAR("years");
 
-    private final int value;
+    private final String value;
 
-    DateTimePickerView(final int value) {
+    DateTimePickerStartView(final String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 }

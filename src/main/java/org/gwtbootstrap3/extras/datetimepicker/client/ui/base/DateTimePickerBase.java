@@ -61,8 +61,8 @@ import java.util.Map;
  */
 public class DateTimePickerBase extends Widget implements HasEnabled, HasId, HasResponsiveness,
         HasVisibility, HasPlaceholder, HasAutoClose, HasDaysOfWeekDisabled, HasEndDate, HasForceParse,
-        HasFormat, HasHighlightToday, HasKeyboardNavigation, HasMaxView, HasMinuteStep, HasMinView,
-        HasShowTodayButton, HasStartDate, HasStartView, HasViewSelect, HasWeekStart,
+        HasFormat,  HasMinuteStep,
+        HasShowTodayButton, HasStartDate, HasStartView,  HasWeekStart,
         HasDateTimePickerHandlers, HasLanguage, HasName, HasValue<Date>, HasPosition, IsEditor<LeafValueEditor<Date>> {
 
     // Check http://www.gwtproject.org/javadoc/latest/com/google/gwt/i18n/client/DateTimeFormat.html
@@ -89,17 +89,12 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     private DateTimePickerDayOfWeek weekStart = DateTimePickerDayOfWeek.SUNDAY;
     private DateTimePickerDayOfWeek[] daysOfWeekDisabled = {};
     private boolean autoClose = false;
-    private DateTimePickerView startView = DateTimePickerView.MONTH;
-    private DateTimePickerView minView = DateTimePickerView.HOUR;
-    private DateTimePickerView maxView = DateTimePickerView.DECADE;
+    private DateTimePickerStartView startView = DateTimePickerStartView.MONTH;
+
     private boolean showTodayButton = false;
-    private boolean highlightToday = false;
-    private boolean keyboardNavigation = true;
     private boolean forceParse = true;
     private int minuteStep = 5;
-    private DateTimePickerView viewSelect = DateTimePickerView.HOUR;
-    private boolean showMeridian = false;
-    private Widget container = null;
+
     private DateTimePickerLanguage language = DateTimePickerLanguage.EN;
     private DateTimePickerPosition position = DateTimePickerPosition.BOTTOM_RIGHT;
 
@@ -107,14 +102,6 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
         textBox = new TextBox();
         setElement((Element) textBox.getElement());
         setFormat(format);
-    }
-
-    public void setContainer(final Widget container) {
-        this.container = container;
-    }
-
-    public Widget getContainer() {
-        return container;
     }
 
     public TextBox getTextBox() {
@@ -308,30 +295,6 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
         this.forceParse = forceParse;
     }
 
-    @Override
-    public void setHighlightToday(final boolean highlightToday) {
-        this.highlightToday = highlightToday;
-    }
-
-    @Override
-    public void setHasKeyboardNavigation(final boolean hasKeyboardNavigation) {
-        this.keyboardNavigation = hasKeyboardNavigation;
-    }
-
-    @Override
-    public void setMaxView(final DateTimePickerView dateTimePickerView) {
-        this.maxView = dateTimePickerView;
-    }
-
-    @Override
-    public void setMinView(final DateTimePickerView dateTimePickerView) {
-        this.minView = dateTimePickerView;
-
-        // We keep the view select the same as the min view
-        if (viewSelect != minView) {
-            setViewSelect(dateTimePickerView);
-        }
-    }
 
     @Override
     public void setMinuteStep(final int minuteStep) {
@@ -361,18 +324,8 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     }
 
     @Override
-    public void setStartView(final DateTimePickerView dateTimePickerView) {
-        this.startView = dateTimePickerView;
-    }
-
-    @Override
-    public void setViewSelect(final DateTimePickerView dateTimePickerView) {
-        this.viewSelect = dateTimePickerView;
-
-        // We keep the min view the same as the view select
-        if (viewSelect != minView) {
-            setMinView(dateTimePickerView);
-        }
+    public void setStartView(final DateTimePickerStartView dateTimePickerStartView) {
+        this.startView = dateTimePickerStartView;
     }
 
     @Override
@@ -468,24 +421,16 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     }
 
     protected void configure() {
-        // If the user hasn't specified the container, default to the widget's parent
-        // This makes sure the modal scroll with the content correctly
-        if (container == null) {
-            configure(this, this.getParent());
-        } else {
-            configure(this, container);
-        }
-    }
-
-    protected void configure(final Widget w, final Widget container) {
+        Widget w = this;
         w.getElement().setAttribute("data-date-format", format);
 
         // If configuring not for the first time, datetimepicker must be removed first.
         this.remove(w.getElement());
 
-        configure(w.getElement(), container.getElement(), format, weekStart.getValue(), toDaysOfWeekDisabledString(daysOfWeekDisabled), autoClose,
-                startView.getValue(), minView.getValue(), maxView.getValue(), showTodayButton, highlightToday,
-                keyboardNavigation, forceParse, minuteStep, viewSelect.getValue(), showMeridian, language.getCode(), position.getPosition());
+        configure(w.getElement(), format, toDaysOfWeekDisabledString(daysOfWeekDisabled), autoClose,
+                startView.getValue(),showTodayButton,
+                forceParse, minuteStep, language.getCode(), position.getPosition());
+
     }
 
     protected void execute(final String cmd) {
@@ -498,12 +443,10 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
 
     private native void remove(Element e) /*-{
         $wnd.jQuery(e).datetimepicker('remove');
-        $wnd.jQuery(e).off('show');
-        $wnd.jQuery(e).off('hide');
-        $wnd.jQuery(e).off('changeDate');
-        $wnd.jQuery(e).off('changeYear');
-        $wnd.jQuery(e).off('changeMonth');
-        $wnd.jQuery(e).off('outOfRange');
+        $wnd.jQuery(e).off('dp.show');
+        $wnd.jQuery(e).off('dp.hide');
+        $wnd.jQuery(e).off('dp.change');
+        $wnd.jQuery(e).off('dp.error');
     }-*/;
 
     private native void show(Element e) /*-{
@@ -530,28 +473,21 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
         $wnd.jQuery(e).datetimepicker('daysOfWeekDisabled', daysOfWeekDisabled);
     }-*/;
 
-    protected native void configure(Element e, Element p, String format, int weekStart, String daysOfWeekDisabled,
-                                    boolean autoClose, int startView, int minView,
-                                    int maxView, boolean todayBtn, boolean highlightToday, boolean keyboardNavigation,
-                                    boolean forceParse, int minuteStep, int viewSelect, boolean showMeridian, String language,
+    protected native void configure(Element e, String format, String daysOfWeekDisabled,
+                                    boolean autoClose, String viewMode, boolean todayBtn,
+                                    boolean forceParse, int minuteStep, String language,
                                     String position) /*-{
         var that = this;
         $wnd.jQuery(e).datetimepicker({
             format: format,
-            language: language,
-            weekStart: weekStart,
+            locale: language,
             daysOfWeekDisabled: daysOfWeekDisabled,
-            autoclose: autoClose,
-            startView: startView,
-            minView: minView,
-            maxView: maxView,
-            todayBtn: todayBtn,
-            todayHighlight: highlightToday,
-            keyboardNavigation: keyboardNavigation,
+            useStrict: forceParse,
+            keepOpen: !autoClose,
+            viewMode: viewMode,
+            showTodayButton: todayBtn,
             forceParse: forceParse,
-            minuteStep: minuteStep,
-            pickerPosition: position,
-            container: p
+            stepping: minuteStep
         })
             .on('dp.show', function (e) {
                 that.@org.gwtbootstrap3.extras.datetimepicker.client.ui.base.DateTimePickerBase::onShow(Lcom/google/gwt/user/client/Event;)(e);
