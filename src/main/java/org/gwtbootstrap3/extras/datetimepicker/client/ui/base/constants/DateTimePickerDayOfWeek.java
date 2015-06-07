@@ -23,7 +23,7 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
 /**
  * Day of the week enum for easy access
  *
- * @author Joshua Godi
+ * @author Unimax
  */
 public enum DateTimePickerDayOfWeek {
     SUNDAY(0),

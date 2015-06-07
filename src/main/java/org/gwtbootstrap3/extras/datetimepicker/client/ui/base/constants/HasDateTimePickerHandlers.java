@@ -20,19 +20,18 @@ package org.gwtbootstrap3.extras.datetimepicker.client.ui.base.constants;
  * #L%
  */
 
-import com.google.gwt.user.client.Event;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.gwtbootstrap3.client.shared.event.HideHandler;
 import org.gwtbootstrap3.client.shared.event.ShowHandler;
 import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeDateHandler;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeMonthHandler;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ChangeYearHandler;
-import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.OutOfRangeHandler;
+import org.gwtbootstrap3.extras.datetimepicker.client.ui.base.events.ErrorHandler;
+
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
 
 /**
  * All handlers for the DateTimePicker
  *
- * @author Joshua Godi
+ * @author Joshua Godi , Unimax
  */
 public interface HasDateTimePickerHandlers {
     void onShow(Event e);
@@ -43,19 +42,11 @@ public interface HasDateTimePickerHandlers {
 
     HandlerRegistration addHideHandler(HideHandler hideHandler);
 
-    void onChangeDate(Event e);
+    void onChange(Event e);
 
     HandlerRegistration addChangeDateHandler(ChangeDateHandler changeDateHandler);
 
-    void onChangeYear(Event e);
+    void onError(Event e);
 
-    HandlerRegistration addChangeYearHandler(ChangeYearHandler changeYearHandler);
-
-    void onChangeMonth(Event e);
-
-    HandlerRegistration addChangeMonthHandler(ChangeMonthHandler changeMonthHandler);
-
-    void onOutOfRange(Event e);
-
-    HandlerRegistration addOutOfRangeHandler(OutOfRangeHandler outOfRangeHandler);
+    HandlerRegistration addErrorHandler(ErrorHandler outOfRangeHandler);
 }
