@@ -81,7 +81,6 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
 
 private static final Map<Character, Character> DATE_TIME_FORMAT_MAP = new HashMap<Character, Character>();
     static {
-        DATE_TIME_FORMAT_MAP.put('H', 'h'); // 12/24 hours
         DATE_TIME_FORMAT_MAP.put('D', 'd'); // day
         DATE_TIME_FORMAT_MAP.put('A', 'a'); // meridian
         DATE_TIME_FORMAT_MAP.put('Y', 'y'); // year
@@ -99,7 +98,7 @@ private static final Map<Character, Character> DATE_TIME_FORMAT_MAP = new HashMa
     /**
      * DEFAULT values
      */
-    private String format = "MM/DD/YYYY HH:mm A";
+    private String format = "MM/DD/YYYY hh:mm A";
     private String dayViewHeaderFormat = "MMMM YYYY";
     private String extraFormats = "false";
     private int stepping = 1;
