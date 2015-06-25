@@ -78,8 +78,20 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
         HasDaysOfWeekDisabled, HasEndDate, HasFormat, HasShowTodayButton, HasStartDate, HasStartView,
         HasDateTimePickerHandlers, HasLanguage, HasName, HasValue<Date>, HasPosition, IsEditor<LeafValueEditor<Date>> {
 
+
+private static final Map<Character, Character> DATE_TIME_FORMAT_MAP = new HashMap<Character, Character>();
+    static {
+        DATE_TIME_FORMAT_MAP.put('H', 'h'); // 12/24 hours
+        DATE_TIME_FORMAT_MAP.put('D', 'd'); // day
+        DATE_TIME_FORMAT_MAP.put('A', 'a'); // meridian
+        DATE_TIME_FORMAT_MAP.put('Y', 'y'); // year
+
+    }
+
+
     private final TextBox textBox;
-    private DateTimeFormat dateTimeFormat;
+    private DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
+    private final DateTimeFormat startEndDateFormat = DateTimeFormat.getFormat("yyyy-MM-dd");
     private final DateTimeFormat startEndDateFormat = DateTimeFormat.getFormat("YYYY-MM-DD");
     private LeafValueEditor<Date> editor;
     private final ErrorHandlerMixin<Date> errorHandlerMixin = new ErrorHandlerMixin<Date>(this);
@@ -428,17 +440,22 @@ public class DateTimePickerBase extends Widget implements HasEnabled, HasId, Has
     /** {@inheritDoc} */
     @Override
     public void setFormat(final String format) {
+
+        if (format.equalsIgnoreCase("LT")) {
+            setDateTimeFormat("hh:mm a");
+        } else {
+            final StringBuilder fb = new StringBuilder(format);
+            for (int i = 0; i < fb.length(); i++) {
+                if (DATE_TIME_FORMAT_MAP.containsKey(fb.charAt(i))) {
+                    fb.setCharAt(i, DATE_TIME_FORMAT_MAP.get(fb.charAt(i)));
+                }
+            }
+            // Make the new DateTimeFormat
+            setDateTimeFormat(fb.toString());
+        }
+
         this.format = format;
 
-        // Get the old value
-        final Date oldValue = getValue();
-
-        // Make the new DateTimeFormat
-        setDateTimeFormat(format);
-
-        if (oldValue != null) {
-            setValue(oldValue);
-        }
     }
 
     public void setDate(String date) {
