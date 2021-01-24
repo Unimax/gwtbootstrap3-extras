@@ -18,3 +18,6 @@ To use the widgets defined here, you will need to add this dependency.
 * The API docs for the v1.0-SNAPSHOT can be found [here](http://gwtbootstrap3.github.io/gwtbootstrap3-demo/snapshot/apidocs) as well.
 
 If you have any questions, please ask them on our [Google Group](https://groups.google.com/forum/?fromgroups#!forum/gwtbootstrap3)
+
+
+[![Join the chat at https://gitter.im/Unimax/gwtbootstrap3-extras](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Unimax/gwtbootstrap3-extras?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
